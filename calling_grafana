@@ -1,0 +1,4 @@
+- name: calling_grafana
+  hosts: all
+  roles:
+    - grafana_roles
