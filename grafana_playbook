@@ -1,0 +1,32 @@
+- name: calling_grafana
+  hosts: all
+  roles:
+    - grafana_roles
+root@ip-172-31-38-62:/etc/ansible# ls
+demo.yml  grafana.yml  grafana_roles  grafana_tarun.yml  hosts  playbook_tomcat.yml  prometheus.yml  prometheus_roles  roles  tomcat.yml  tomcat_roles
+root@ip-172-31-38-62:/etc/ansible# cat grafana_tarun.yml 
+---
+- hosts: java
+  become: true
+  tasks:
+    - name: Add Grafana APT repository key
+      apt_key:
+        url: https://packages.grafana.com/gpg.key
+        state: present
+
+    - name: Add Grafana APT repository
+      apt_repository:
+        repo: deb https://packages.grafana.com/oss/deb stable main
+        state: present
+        filename: grafana
+
+    - name: Install Grafana
+      apt:
+        name: grafana
+        state: present
+
+    - name: Start and enable Grafana service
+      systemd:
+        name: grafana-server
+        enabled: yes
+        state: started
